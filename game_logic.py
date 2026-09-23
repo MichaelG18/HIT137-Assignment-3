@@ -203,3 +203,54 @@ class PuzzleGame:
     def _update_completion(self):
         """Update the completion state of the current puzzle."""
         self._game_complete = self.is_complete()
+
+    def request_hint(self):
+        """
+        Return information for one incorrect tile.
+
+        The returned tuple contains:
+        (current_position, correct_position)
+
+        A maximum of three hints can be used per game.
+        """
+        if self._game_complete:
+            return None
+
+        if self._hints_used >= 3:
+            return None
+
+        for position, tile in enumerate(self._tiles):
+            if not tile.is_correct():
+                self._hints_used += 1
+                return position, tile.correct_position
+
+        return None
+
+    def hints_remaining(self):
+        """Return the number of hints still available."""
+        return max(0, 3 - self._hints_used)
+
+    def solve(self):
+        """Restore every tile to its correct position and orientation."""
+        solved_tiles = sorted(
+            self._tiles,
+            key=lambda tile: tile.correct_position
+        )
+
+        for position, tile in enumerate(solved_tiles):
+            tile.current_position = position
+
+            while tile.rotation != 0:
+                tile.rotate_clockwise()
+
+            if tile.flipped:
+                tile.flip_horizontal()
+
+        self._tiles = solved_tiles
+        self._moves = 0
+        self._selected_position = None
+        self._game_complete = True
+
+    def reset_game(self):
+        """Reset the current puzzle using the same grid size."""
+        self.new_game(self._grid_size)

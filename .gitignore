@@ -1,0 +1,69 @@
+# ==========================
+# Python
+# ==========================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ==========================
+# Virtual environments
+# ==========================
+
+venv/
+.venv/
+env/
+ENV/
+
+# ==========================
+# IDE / Editor
+# ==========================
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# ==========================
+# Operating System
+# ==========================
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# ==========================
+# Python tooling / testing
+# ==========================
+
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# ==========================
+# Build / package files
+# ==========================
+
+build/
+dist/
+*.egg-info/
+
+# ==========================
+# Temporary files
+# ==========================
+
+*.tmp
+*.temp
+*.log
+*~
+
+# ==========================
+# Local test images
+# ==========================
+
+test_images/

@@ -219,7 +219,9 @@ class PuzzleApp:
         instructions_frame = ttk.LabelFrame(
             image_area,
             text="How to Play",
-            padding=15
+            padding=12,
+            width=220,
+            height=450
         )
 
         instructions_frame.grid(
@@ -230,67 +232,64 @@ class PuzzleApp:
             sticky="n"
         )
 
+        # Keep the panel aligned with the 450 px image canvases.
+        instructions_frame.grid_propagate(False)
+
         ttk.Label(
             instructions_frame,
             text="Controls",
             font=("Arial", 12, "bold")
         ).pack(
             anchor=tk.W,
-            pady=(0, 12)
+            pady=(0, 8)
         )
 
         ttk.Label(
             instructions_frame,
             text="Left Click",
             font=("Arial", 10, "bold")
-        ).pack(
-            anchor=tk.W
-        )
+        ).pack(anchor=tk.W)
 
         ttk.Label(
             instructions_frame,
             text="Select a tile or swap two tiles",
-            wraplength=180,
+            wraplength=190,
             justify=tk.LEFT
         ).pack(
             anchor=tk.W,
-            pady=(2, 12)
+            pady=(1, 8)
         )
 
         ttk.Label(
             instructions_frame,
             text="Right Click",
             font=("Arial", 10, "bold")
-        ).pack(
-            anchor=tk.W
-        )
+        ).pack(anchor=tk.W)
 
         ttk.Label(
             instructions_frame,
             text="Rotate a tile 90° clockwise",
-            wraplength=180,
+            wraplength=190,
             justify=tk.LEFT
         ).pack(
             anchor=tk.W,
-            pady=(2, 12)
+            pady=(1, 8)
         )
 
         ttk.Label(
             instructions_frame,
             text="Shift + Left Click",
             font=("Arial", 10, "bold")
-        ).pack(
-            anchor=tk.W
-        )
+        ).pack(anchor=tk.W)
 
         ttk.Label(
             instructions_frame,
             text="Flip a tile horizontally",
-            wraplength=180,
+            wraplength=190,
             justify=tk.LEFT
         ).pack(
             anchor=tk.W,
-            pady=(2, 18)
+            pady=(1, 10)
         )
 
         ttk.Separator(
@@ -298,7 +297,7 @@ class PuzzleApp:
             orient=tk.HORIZONTAL
         ).pack(
             fill=tk.X,
-            pady=(0, 15)
+            pady=(2, 10)
         )
 
         ttk.Label(
@@ -307,25 +306,22 @@ class PuzzleApp:
             font=("Arial", 12, "bold")
         ).pack(
             anchor=tk.W,
-            pady=(0, 10)
+            pady=(0, 7)
         )
 
         ttk.Label(
             instructions_frame,
             text=(
                 "• Match the puzzle to the original image.\n\n"
-                "• Green ticks show tiles that are in the "
-                "correct position and orientation.\n\n"
-                "• Use Hint if you need help locating an "
-                "incorrect tile.\n\n"
-                "• A maximum of 3 hints are available.\n\n"
+                "• Green ticks show correctly placed tiles.\n\n"
+                "• Hint identifies an incorrect tile and its "
+                "correct position.\n\n"
+                "• Maximum of 3 hints per game.\n\n"
                 "• Solve automatically restores the puzzle."
             ),
             wraplength=190,
             justify=tk.LEFT
-        ).pack(
-            anchor=tk.W
-        )
+        ).pack(anchor=tk.W)
 
         # -----------------------------------------------------
         # Mouse controls

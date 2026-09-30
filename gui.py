@@ -9,19 +9,23 @@ from puzzle import Puzzle
 
 
 class PuzzleApp:
+    """Graphical user interface for the HIT137 Image Puzzle Game."""
 
     def __init__(self, root):
         self.root = root
 
         self.root.title("HIT137 Image Puzzle")
-        self.root.geometry("1050x700")
+        self.root.geometry("1280x720")
+        self.root.minsize(1100, 680)
+
+        # -----------------------------------------------------
+        # Game state
+        # -----------------------------------------------------
 
         self.puzzle = None
-
         self.selected_tile = None
 
         self.moves = 0
-
         self.hints_remaining = 3
 
         self.hint_current = None
@@ -29,8 +33,13 @@ class PuzzleApp:
 
         self.game_finished = False
 
+        # Keep references to Tkinter images.
         self.original_photo = None
         self.puzzle_photo = None
+
+        # -----------------------------------------------------
+        # Tkinter variables
+        # -----------------------------------------------------
 
         self.grid_var = tk.StringVar(
             value="3 x 3"
@@ -55,6 +64,7 @@ class PuzzleApp:
     # =========================================================
 
     def create_interface(self):
+        """Create and arrange all GUI elements."""
 
         main = ttk.Frame(
             self.root,
@@ -66,21 +76,29 @@ class PuzzleApp:
             expand=True
         )
 
+        # -----------------------------------------------------
+        # Title
+        # -----------------------------------------------------
+
         title = ttk.Label(
             main,
             text="Image Puzzle Game",
             font=("Arial", 22, "bold")
         )
 
-        title.pack(pady=10)
+        title.pack(
+            pady=(5, 10)
+        )
 
         # -----------------------------------------------------
-        # Controls
+        # Top controls
         # -----------------------------------------------------
 
         controls = ttk.Frame(main)
 
-        controls.pack(pady=10)
+        controls.pack(
+            pady=(0, 15)
+        )
 
         ttk.Label(
             controls,
@@ -117,7 +135,9 @@ class PuzzleApp:
         )
 
         # -----------------------------------------------------
-        # Image area
+        # Main content area
+        #
+        # Original Image | Puzzle Image | How to Play
         # -----------------------------------------------------
 
         image_area = ttk.Frame(main)
@@ -127,43 +147,185 @@ class PuzzleApp:
             expand=True
         )
 
+        # Centre the complete three-column area.
+        image_area.columnconfigure(
+            0,
+            weight=1
+        )
+
+        image_area.columnconfigure(
+            4,
+            weight=1
+        )
+
+        # -----------------------------------------------------
+        # Original image
+        # -----------------------------------------------------
+
         original_frame = ttk.LabelFrame(
             image_area,
             text="Original Image"
         )
 
-        original_frame.pack(
-            side=tk.LEFT,
-            padx=10
+        original_frame.grid(
+            row=0,
+            column=1,
+            padx=(5, 10),
+            pady=5,
+            sticky="n"
         )
 
         self.original_canvas = tk.Canvas(
             original_frame,
             width=450,
             height=450,
-            bg="white"
+            bg="white",
+            highlightthickness=0
         )
 
         self.original_canvas.pack()
+
+        # -----------------------------------------------------
+        # Puzzle image
+        # -----------------------------------------------------
 
         puzzle_frame = ttk.LabelFrame(
             image_area,
             text="Puzzle Image"
         )
 
-        puzzle_frame.pack(
-            side=tk.LEFT,
-            padx=10
+        puzzle_frame.grid(
+            row=0,
+            column=2,
+            padx=10,
+            pady=5,
+            sticky="n"
         )
 
         self.puzzle_canvas = tk.Canvas(
             puzzle_frame,
             width=450,
             height=450,
-            bg="white"
+            bg="white",
+            highlightthickness=0
         )
 
         self.puzzle_canvas.pack()
+
+        # -----------------------------------------------------
+        # Instructions panel
+        # -----------------------------------------------------
+
+        instructions_frame = ttk.LabelFrame(
+            image_area,
+            text="How to Play",
+            padding=15
+        )
+
+        instructions_frame.grid(
+            row=0,
+            column=3,
+            padx=(10, 5),
+            pady=5,
+            sticky="n"
+        )
+
+        ttk.Label(
+            instructions_frame,
+            text="Controls",
+            font=("Arial", 12, "bold")
+        ).pack(
+            anchor=tk.W,
+            pady=(0, 12)
+        )
+
+        ttk.Label(
+            instructions_frame,
+            text="Left Click",
+            font=("Arial", 10, "bold")
+        ).pack(
+            anchor=tk.W
+        )
+
+        ttk.Label(
+            instructions_frame,
+            text="Select a tile or swap two tiles",
+            wraplength=180,
+            justify=tk.LEFT
+        ).pack(
+            anchor=tk.W,
+            pady=(2, 12)
+        )
+
+        ttk.Label(
+            instructions_frame,
+            text="Right Click",
+            font=("Arial", 10, "bold")
+        ).pack(
+            anchor=tk.W
+        )
+
+        ttk.Label(
+            instructions_frame,
+            text="Rotate a tile 90° clockwise",
+            wraplength=180,
+            justify=tk.LEFT
+        ).pack(
+            anchor=tk.W,
+            pady=(2, 12)
+        )
+
+        ttk.Label(
+            instructions_frame,
+            text="Shift + Left Click",
+            font=("Arial", 10, "bold")
+        ).pack(
+            anchor=tk.W
+        )
+
+        ttk.Label(
+            instructions_frame,
+            text="Flip a tile horizontally",
+            wraplength=180,
+            justify=tk.LEFT
+        ).pack(
+            anchor=tk.W,
+            pady=(2, 18)
+        )
+
+        ttk.Separator(
+            instructions_frame,
+            orient=tk.HORIZONTAL
+        ).pack(
+            fill=tk.X,
+            pady=(0, 15)
+        )
+
+        ttk.Label(
+            instructions_frame,
+            text="Game Guide",
+            font=("Arial", 12, "bold")
+        ).pack(
+            anchor=tk.W,
+            pady=(0, 10)
+        )
+
+        ttk.Label(
+            instructions_frame,
+            text=(
+                "• Match the puzzle to the original image.\n\n"
+                "• Green ticks show tiles that are in the "
+                "correct position and orientation.\n\n"
+                "• Use Hint if you need help locating an "
+                "incorrect tile.\n\n"
+                "• A maximum of 3 hints are available.\n\n"
+                "• Solve automatically restores the puzzle."
+            ),
+            wraplength=190,
+            justify=tk.LEFT
+        ).pack(
+            anchor=tk.W
+        )
 
         # -----------------------------------------------------
         # Mouse controls
@@ -190,7 +352,9 @@ class PuzzleApp:
 
         score = ttk.Frame(main)
 
-        score.pack(pady=10)
+        score.pack(
+            pady=(10, 5)
+        )
 
         ttk.Label(
             score,
@@ -216,7 +380,9 @@ class PuzzleApp:
 
         buttons = ttk.Frame(main)
 
-        buttons.pack(pady=5)
+        buttons.pack(
+            pady=(5, 10)
+        )
 
         self.hint_button = ttk.Button(
             buttons,
@@ -242,22 +408,12 @@ class PuzzleApp:
             padx=10
         )
 
-        instructions = (
-            "Left click: Select/Swap    |    "
-            "Right click: Rotate    |    "
-            "Shift + Left click: Flip"
-        )
-
-        ttk.Label(
-            main,
-            text=instructions
-        ).pack(pady=5)
-
     # =========================================================
     # LOAD IMAGE
     # =========================================================
 
     def load_image(self):
+        """Load an image and create a new scrambled puzzle."""
 
         file_path = filedialog.askopenfilename(
             filetypes=[
@@ -277,7 +433,6 @@ class PuzzleApp:
             )
 
         except ValueError as error:
-
             messagebox.showerror(
                 "Error",
                 str(error)
@@ -317,10 +472,11 @@ class PuzzleApp:
         self.refresh()
 
     # =========================================================
-    # LEFT CLICK
+    # LEFT CLICK - SELECT / SWAP
     # =========================================================
 
     def left_click(self, event):
+        """Select a tile or swap two selected tiles."""
 
         if self.puzzle is None:
             return
@@ -335,23 +491,22 @@ class PuzzleApp:
 
         clicked = (row, col)
 
+        # First click selects a tile.
         if self.selected_tile is None:
-
             self.selected_tile = clicked
             self.draw_puzzle()
 
             return
 
+        # Clicking the selected tile again deselects it.
         if self.selected_tile == clicked:
-
             self.selected_tile = None
             self.draw_puzzle()
 
             return
 
-        old_row, old_col = (
-            self.selected_tile
-        )
+        # Second different tile performs the swap.
+        old_row, old_col = self.selected_tile
 
         self.puzzle.swap_tiles(
             old_row,
@@ -367,10 +522,11 @@ class PuzzleApp:
         self.after_move()
 
     # =========================================================
-    # RIGHT CLICK
+    # RIGHT CLICK - ROTATE
     # =========================================================
 
     def right_click(self, event):
+        """Rotate the clicked tile 90 degrees clockwise."""
 
         if (
             self.puzzle is None
@@ -394,13 +550,14 @@ class PuzzleApp:
         self.after_move()
 
     # =========================================================
-    # SHIFT + LEFT CLICK
+    # SHIFT + LEFT CLICK - FLIP
     # =========================================================
 
     def shift_left_click(
         self,
         event
     ):
+        """Flip the clicked tile horizontally."""
 
         if (
             self.puzzle is None
@@ -433,6 +590,7 @@ class PuzzleApp:
         x,
         y
     ):
+        """Convert canvas coordinates into puzzle row and column."""
 
         image_size = (
             self.puzzle.original_image.shape[0]
@@ -463,15 +621,15 @@ class PuzzleApp:
     # =========================================================
 
     def after_move(self):
+        """Refresh the game and check whether it has been solved."""
 
-        # Hint disappears after next move.
+        # Remove the previous hint after the player's next move.
         self.hint_current = None
         self.hint_home = None
 
         self.refresh()
 
         if self.puzzle.is_solved():
-
             self.game_finished = True
 
             self.hint_button.config(
@@ -494,6 +652,7 @@ class PuzzleApp:
     # =========================================================
 
     def refresh(self):
+        """Refresh all displayed game information."""
 
         self.draw_original()
         self.draw_puzzle()
@@ -522,6 +681,7 @@ class PuzzleApp:
     # =========================================================
 
     def draw_original(self):
+        """Draw the original reference image."""
 
         self.original_canvas.delete(
             "all"
@@ -541,7 +701,6 @@ class PuzzleApp:
         )
 
         if self.hint_home:
-
             self.draw_circle(
                 self.original_canvas,
                 *self.hint_home
@@ -552,6 +711,7 @@ class PuzzleApp:
     # =========================================================
 
     def draw_puzzle(self):
+        """Draw the current state of the puzzle."""
 
         self.puzzle_canvas.delete(
             "all"
@@ -579,11 +739,9 @@ class PuzzleApp:
         self.draw_correct_ticks()
 
         if self.selected_tile:
-
             self.draw_selection()
 
         if self.hint_current:
-
             self.draw_circle(
                 self.puzzle_canvas,
                 *self.hint_current
@@ -594,6 +752,7 @@ class PuzzleApp:
     # =========================================================
 
     def draw_grid(self):
+        """Draw the grid lines over the puzzle."""
 
         size = (
             self.puzzle
@@ -609,7 +768,6 @@ class PuzzleApp:
             1,
             self.puzzle.grid_size
         ):
-
             position = (
                 i * tile_size
             )
@@ -635,6 +793,7 @@ class PuzzleApp:
     # =========================================================
 
     def draw_selection(self):
+        """Highlight the currently selected tile."""
 
         row, col = self.selected_tile
 
@@ -664,10 +823,11 @@ class PuzzleApp:
         )
 
     # =========================================================
-    # CORRECT TICKS
+    # CORRECT TILE TICKS
     # =========================================================
 
     def draw_correct_ticks(self):
+        """Display a green tick on each correctly restored tile."""
 
         size = (
             self.puzzle
@@ -682,11 +842,9 @@ class PuzzleApp:
         for row in range(
             self.puzzle.grid_size
         ):
-
             for col in range(
                 self.puzzle.grid_size
             ):
-
                 if (
                     self.puzzle
                     .is_tile_correct(
@@ -694,7 +852,6 @@ class PuzzleApp:
                         col
                     )
                 ):
-
                     x = (
                         col * tile_size
                         + tile_size - 18
@@ -722,6 +879,7 @@ class PuzzleApp:
     # =========================================================
 
     def show_hint(self):
+        """Display a hint for one incorrect puzzle tile."""
 
         if (
             self.puzzle is None
@@ -739,7 +897,6 @@ class PuzzleApp:
         self.hints_remaining -= 1
 
         if self.hints_remaining == 0:
-
             self.hint_button.config(
                 state=tk.DISABLED
             )
@@ -752,6 +909,7 @@ class PuzzleApp:
         row,
         col
     ):
+        """Draw the visual marker used by the hint system."""
 
         size = (
             self.puzzle
@@ -789,6 +947,7 @@ class PuzzleApp:
     # =========================================================
 
     def solve(self):
+        """Automatically restore the puzzle to its solved state."""
 
         if self.puzzle is None:
             return
@@ -820,6 +979,7 @@ class PuzzleApp:
 
     @staticmethod
     def cv_to_photo(image):
+        """Convert an OpenCV BGR image into a Tkinter-compatible image."""
 
         rgb = cv2.cvtColor(
             image,
